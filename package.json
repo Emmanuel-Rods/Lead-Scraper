@@ -1,0 +1,24 @@
+{
+  "name": "scraper-server",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "g-maps" : "node src/Google-Maps-Scraper.js",
+    "g-business": "node src/Google-Business-Scraper.js",
+    "cookies": "node src/cookies.js",
+    "fb": "node src/FaceBook-Scraper.js" ,
+    "emails" : "node src/Email-Crawler.js"
+  },
+  "author": "Roger Rodrigues",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "cheerio": "^1.0.0",
+    "dotenv": "^16.4.7",
+    "puppeteer": "^23.10.4",
+    "puppeteer-extra": "^3.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "puppeteer-real-browser": "^1.3.20",
+    "xlsx": "^0.18.5"
+  }
+}
