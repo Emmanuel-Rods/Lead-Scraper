@@ -104,10 +104,14 @@ async function emailCrawler(jsonArray, fileName) {
       rows.push(data); // just to compare , remove if neccessary
     }
   }
-  // return rows;
+  function filterRowsWithEmail(rows) {
+    return rows.filter(row => row[Object.keys(row)[2]]); // Checks if the third property (email) exists
+  }
+
+  Filteredrows = filterRowsWithEmail(rows)
 
   //save data to excel
-  const worksheet = xlsx.utils.json_to_sheet(rows);
+  const worksheet = xlsx.utils.json_to_sheet(Filteredrows);
   const workbook = xlsx.utils.book_new();
   xlsx.utils.book_append_sheet(workbook, worksheet, "Updated Data");
   xlsx.writeFile(workbook, fileName);

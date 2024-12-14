@@ -11,7 +11,7 @@ puppeteerExtra.use(Stealth());
 
 async function gBusiness(service, location) {
   const query = `${service} in ${location}`;
-  const browser = await puppeteerExtra.launch({ headless: false});
+  const browser = await puppeteerExtra.launch({ headless: true});
   const page = await browser.newPage();
 
   await page.setViewport({

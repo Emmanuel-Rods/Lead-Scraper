@@ -10,7 +10,7 @@ const emailCrawler = require("./src/Email-Crawler.js");
 // console.log(emailCrawler) //  @ params  jsonarray , filename @returns excel file
 
 // Input configurations
-const locations = ["tracy , cal"];
+const locations = ["Oxnard california"];
 
 // Function to merge and deduplicate results
 function mergeResults(facebookData = [], gMapsData = [], gBusinessData = []) {
@@ -149,6 +149,7 @@ async function Main() {
         {gMaps:'solar system installation',gBusiness:'solar system installation', faceBook: 'solar system installation', fileName: `solar system installation in ${location}` },
         {gMaps:'carpenter',gBusiness:'carepenter', faceBook: 'carpenter', fileName: `carpenter in ${location}` },
         ];
+  
       for (const config of scraperConfigs) {
         await processScraperConfig(config, location);
       }

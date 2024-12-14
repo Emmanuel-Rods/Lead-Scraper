@@ -10,7 +10,7 @@ const disableFilters = true;
 
 async function gMaps(service, location) {
   const query = queryBuilder(service + " in " + location);
-  const browserObj = await puppeteerExtra.launch({ headless: false });
+  const browserObj = await puppeteerExtra.launch({ headless: true});
   const page = await browserObj.newPage();
 
   await page.setViewport({ width: 1920, height: 1080 });
