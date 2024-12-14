@@ -11,7 +11,7 @@ puppeteerExtra.use(Stealth());
 
 async function gBusiness(service, location) {
   const query = `${service} in ${location}`;
-  const browser = await puppeteerExtra.launch({ headless: true });
+  const browser = await puppeteerExtra.launch({ headless: false});
   const page = await browser.newPage();
 
   await page.setViewport({
@@ -100,7 +100,12 @@ async function gBusiness(service, location) {
   }
   let uniqueLinks = [...new Set(results)];
 
+  const dataLength = () => {
+    return uniqueLinks.length;
+  };
+
   console.log(`unique links : ${uniqueLinks.length}`);
+
   console.log(`result : ${results.length}`);
 
   let data = [];

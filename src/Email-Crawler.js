@@ -86,7 +86,8 @@ const getHomePage = (url) => {
 
 async function emailCrawler(jsonArray, fileName) {
   if (jsonArray.length == 0) {
-    throw new Error("Excel file empty");
+    console.warn(`Json Array has no data`)
+    return []
   }
   //loop over the json array
   const rows = [];
@@ -117,7 +118,7 @@ async function emailCrawler(jsonArray, fileName) {
 async function jsRender(url) {
   const { browser, page } = await connect({
     defaultViewport: null,
-    headless: false,
+    headless: true,
     args: [],
 
     customConfig: {},

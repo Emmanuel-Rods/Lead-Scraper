@@ -10,7 +10,7 @@ const pageLoadDelay = 8000 // in miliseconds
 
 
 async function facebookScraper(query , cityName) {
-  const browser = await puppeteerExtra.launch({ headless: true });
+  const browser = await puppeteerExtra.launch({ headless: false});
   const page = await browser.newPage();
 
   await page.setViewport({ width: 1920, height: 1080 });
@@ -112,8 +112,9 @@ async function facebookScraper(query , cityName) {
           }
           return null;
         };
-
-        const nameElement = document.querySelector("h1");
+        
+        let nameElement = null
+        nameElement = document.querySelector("h1");
         const name = nameElement ? nameElement.textContent.trim() : null;
 
         // Extract phone number, email, and website using their unique file names
