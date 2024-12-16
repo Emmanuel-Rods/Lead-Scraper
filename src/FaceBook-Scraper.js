@@ -10,7 +10,7 @@ const pageLoadDelay = 8000 // in miliseconds
 
 
 async function facebookScraper(query , cityName) {
-  const browser = await puppeteerExtra.launch({ headless: false});
+  const browser = await puppeteerExtra.launch({ headless: true});
   const page = await browser.newPage();
 
   await page.setViewport({ width: 1920, height: 1080 });

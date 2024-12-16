@@ -1,3 +1,22 @@
 name@domain.com
 name@youremailaddress.com
 filler@godaddy.com
+example@example.com
+email@domain.com
+your@email.com
+email@example.com
+
+test@example.com
+user1234@fakeemail.com
+john.doe@placeholder.com
+sample.email@domain.com
+anonymous@fakemail.org
+example.user@nowhere.com
+random123@mockmail.com
+demo.account@testing.com
+
+john@doe.com
+john@smith.com
+ 'user@domain.com'
+ 0@gmail.com
+ 'info@mysite.com'

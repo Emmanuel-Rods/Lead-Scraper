@@ -8,6 +8,7 @@ console.warn(`\n
   *** Disclaimer ***\n
   This program uses Puppeteer with the '--no-sandbox' and '--disable-setuid-sandbox' flags.\n
   Use this program at your own risk, and ensure you fully understand the potential implications before running it.\n
+  - Roger 
   `);
   
 // console.log(facebookScraper) // @ params service, location @returns jsonarray
