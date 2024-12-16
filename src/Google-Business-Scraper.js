@@ -91,7 +91,7 @@ async function gBusiness(service, location) {
     // Break the loop
     if (!clicked) {
       console.log("No more pages to navigate");
-      console.log(results.length);
+      console.info(`Extracted Data from Google Local Business ${results.length}`);
       break;
     }
 
@@ -105,9 +105,6 @@ async function gBusiness(service, location) {
   };
 
   console.log(`unique links : ${uniqueLinks.length}`);
-
-  console.log(`result : ${results.length}`);
-
   let data = [];
 
   for (let link of uniqueLinks) {

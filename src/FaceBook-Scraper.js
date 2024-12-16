@@ -10,7 +10,7 @@ const pageLoadDelay = 8000 // in miliseconds
 
 
 async function facebookScraper(query , cityName) {
-  const browser = await puppeteerExtra.launch({ headless: true});
+  const browser = await puppeteerExtra.launch({ headless: false});
   const page = await browser.newPage();
 
   await page.setViewport({ width: 1920, height: 1080 });
@@ -167,7 +167,8 @@ async function facebookScraper(query , cityName) {
   // await page.screenshot({ path: "screenshot.png" });
   // saveToExcel(extractedData, `${query}-in-${cityName}-facebook.xlsx`);
   await browser.close();
-  console.log(extractedData.length)
+  console.info(`Extracted Data from FaceBook for Query ${query} : ${extractedData.length}`)
+  console.warn('____________________________________________________________________________________________________')
   return extractedData;
 }
 

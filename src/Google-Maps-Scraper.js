@@ -131,7 +131,7 @@ async function gMaps(service, location) {
   // await page.screenshot({ path: "screenshot.png" });
   await browserObj.close();
   console.log(data)
-  console.log(data.length)
+  console.info(`Extracted Data from Google Maps ${data.length}`);
   return data;
 }
 
