@@ -4,13 +4,19 @@ const gBusiness = require("./src/Google-Business-Scraper.js");
 const gMaps = require("./src/Google-Maps-Scraper.js");
 const emailCrawler = require("./src/Email-Crawler.js");
 
+console.warn(`\n
+  *** Disclaimer ***\n
+  This program uses Puppeteer with the '--no-sandbox' and '--disable-setuid-sandbox' flags.\n
+  Use this program at your own risk, and ensure you fully understand the potential implications before running it.\n
+  `);
+  
 // console.log(facebookScraper) // @ params service, location @returns jsonarray
 // console.log(gBusiness) @ params service, location   @returns jsonarray
 // console.log(gMaps) @ params service, location  @returns jsonarray
 // console.log(emailCrawler) //  @ params  jsonarray , filename @returns excel file
 
 // Input configurations
-const locations = ["Oxnard california"];
+const locations = ["mumbai"];
 
 // Function to merge and deduplicate results
 function mergeResults(facebookData = [], gMapsData = [], gBusinessData = []) {
@@ -118,38 +124,40 @@ async function processScraperConfig(config, location) {
 async function Main() {
   try {
     for (const location of locations) {
-          const scraperConfigs = [
-        { gMaps: 'Aluminum and PVC joinery',gBusiness:"Aluminium and PVC joinery" ,faceBook: 'Aluminum Joinery',faceBookAlt: "PVC joinery", fileName: `Aluminium and PVC joinery in ${location}` },
-        { gMaps: 'Carpet and Upholstery Cleaning', faceBook: 'Carpet Cleaning', faceBookAlt:'Upholstery Cleaning',gBusiness: 'Carpet and upholstery cleaning', fileName: `Carpet and Upholstery Cleaning in ${location}` },
-        {gMaps:'cleaning',gBusiness:'cleaning', faceBook: 'cleaning', fileName: `Cleaning in ${location}` },
-        {gMaps:'Fencing and Decking',gBusiness:'fencing and decking', faceBook: 'fencing',faceBookAlt:'decking', fileName: `fencing and decking in ${location}` },
-        {gMaps:'custom blinds and shutters',gBusiness:'custom blinds and shutters', faceBook: 'custom blinds',faceBookAlt:'shutters', fileName: `Custom blinds and shutters in ${location}` },
-        {gMaps:'gardening and landscapes designers',gBusiness:'gardening and landscapes designers', faceBook: 'gardener',faceBookAlt:'landscapes designers', fileName: `gardening and landscapes designers in ${location}` }, {gMaps:'plastering and rendering',gBusiness:'plastering and rendering', faceBook: 'plastering',faceBookAlt:'rendering', fileName: `plastering and redering ${location}` },
-        {gMaps:'gas line installation and plumbing',gBusiness:'gas line installation and plumbing', faceBook: 'gas line installation',faceBookAlt:'plumbing', fileName: `gas line installation and plumbing in ${location}` },
-        {gMaps:'painting and decoration',gBusiness:'painting and decoration', faceBook: 'painting',faceBookAlt:'decoration', fileName: `painting and decoration in ${location}` },
-        {gMaps:'interior doors',gBusiness:'interior doors', faceBook: 'interior doors', fileName: `interior doors in ${location}` },
-        {gMaps:'door repair',gBusiness:'door repair', faceBook: 'door repair', fileName: `door repair in ${location}` },
-        {gMaps:'electrical services',gBusiness:'electrical services', faceBook: 'electrician', fileName: `electrical servics in ${location}` },
-        {gMaps:'pool installation and repair ',gBusiness:'pool installation and repair', faceBook: 'pool installation',faceBookAlt:'pool repair', fileName: `pool installation and repair in ${location}` },
-        {gMaps:'floor installation',gBusiness:'floor installation', faceBook: 'floor installation', fileName: `floor installation in ${location}` },
-        {gMaps:'furniture assembly',gBusiness:'furniture assembly', faceBook: 'furniture assembly', fileName: `furniture assembly in ${location}` },
-        {gMaps:'paving',gBusiness:'paving', faceBook: 'paving', fileName: `gas line installation and plumbing in ${location}` }, 
-        {gMaps:'locksmith',gBusiness:'locksmith', faceBook: 'locksmith', fileName: `locksmith in ${location}` },
-        {gMaps:'Man with a Van',gBusiness:'man with a Van', faceBook: 'man with a Van', fileName: `man with a van in ${location}` },
-        {gMaps:'pest control',gBusiness:'pest control', faceBook: 'pest control', fileName: `pest control in ${location}` },
-        {gMaps:'house movers',gBusiness:'house movers', faceBook: 'house movers', fileName: `house movers in ${location}` },
-        {gMaps:'house renovation',gBusiness:'house renovation', faceBook: 'house renovation', fileName: `house renovation in ${location}` },
-        {gMaps:'roof repair',gBusiness:'roof repair', faceBook: 'roof repair', fileName: `roof repair in ${location}` },
-        {gMaps:'construction equipment hire',gBusiness:'construction equipment hire', faceBook: 'construction equipment hire', fileName: `construction equipment in ${location}` },
-        {gMaps:'skip hire',gBusiness:'skip equipment hire', faceBook: 'skip hire', fileName: `skip hire in ${location}` },
-        {gMaps:'home electrical inspection',gBusiness:'home electrical inspection', faceBook: 'home electrical inspection', fileName: `home electrical inspection in ${location}` },
-        {gMaps:'energy performance certificate',gBusiness:'energy performance certificate', faceBook: 'energy performance certificate', fileName: `eneergy performance certificate in ${location}` },
-        {gMaps:'gas safety certificate',gBusiness:'gas safety certificate', faceBook: 'gas safety certificate', fileName: `gas safety certificate in ${location}` },
-        {gMaps:'air conditioner repairing',gBusiness:'air condition repairing', faceBook: 'air condition repair', fileName: `repair of air conditioners in ${location}` },
-        {gMaps:'solar system installation',gBusiness:'solar system installation', faceBook: 'solar system installation', fileName: `solar system installation in ${location}` },
-        {gMaps:'carpenter',gBusiness:'carepenter', faceBook: 'carpenter', fileName: `carpenter in ${location}` },
-        ];
-  
+
+      const scraperConfigs = [
+        { gMaps: 'Aluminum Joinery', gMapsAlt: 'PVC Joinery', gBusiness: 'Aluminium and PVC Joinery', faceBook: 'Aluminum Joinery', faceBookAlt: 'PVC Joinery', fileName: `Aluminium and PVC Joinery in ${location}` },
+        { gMaps: 'Carpet and Upholstery Cleaning', faceBook: 'Carpet Cleaning', faceBookAlt: 'Upholstery Cleaning', gBusiness: 'Carpet and Upholstery Cleaning', fileName: `Carpet and Upholstery Cleaning in ${location}` },
+        { gMaps: 'Cleaning', gBusiness: 'Cleaning', faceBook: 'Cleaning', fileName: `Cleaning in ${location}` },
+        { gMaps: 'Fencing', gMapsAlt: 'Decking', gBusiness: 'Fencing and Decking', faceBook: 'Fencing', faceBookAlt: 'Decking', fileName: `Fencing and Decking in ${location}` },
+        { gMaps: 'Custom Blinds', gMapsAlt: 'Shutters', gBusiness: 'Custom Blinds and Shutters', faceBook: 'Custom Blinds', faceBookAlt: 'Shutters', fileName: `Custom Blinds and Shutters in ${location}` },
+        { gMaps: 'Gardening and Landscape Designers', gBusiness: 'Gardening and Landscape Designers', faceBook: 'Gardening', faceBookAlt: 'Landscape Designers', fileName: `Gardening and Landscape Designers in ${location}` },
+        { gMaps: 'Plastering and Rendering', gBusiness: 'Plastering and Rendering', faceBook: 'Plastering', faceBookAlt: 'Rendering', fileName: `Plastering and Rendering in ${location}` },
+        { gMaps: 'Gas Line Installation and Plumbing', gBusiness: 'Gas Line Installation and Plumbing', faceBook: 'Gas Line Installation', faceBookAlt: 'Plumbing', fileName: `Gas Line Installation and Plumbing in ${location}` },
+        { gMaps: 'Painting and Decoration', gBusiness: 'Painting and Decoration', faceBook: 'Painting', faceBookAlt: 'Decoration', fileName: `Painting and Decoration in ${location}` },
+        { gMaps: 'Interior Doors', gBusiness: 'Interior Doors', faceBook: 'Interior Doors', fileName: `Interior Doors in ${location}` },
+        { gMaps: 'Door Repair', gBusiness: 'Door Repair', faceBook: 'Door Repair', fileName: `Door Repair in ${location}` },
+        { gMaps: 'Electrical Services', gBusiness: 'Electrical Services', faceBook: 'Electrician', fileName: `Electrical Services in ${location}` },
+        { gMaps: 'Pool Installation and Repair', gBusiness: 'Pool Installation and Repair', faceBook: 'Pool Installation', faceBookAlt: 'Pool Repair', fileName: `Pool Installation and Repair in ${location}` },
+        { gMaps: 'Floor Installation', gBusiness: 'Floor Installation', faceBook: 'Floor Installation', fileName: `Floor Installation in ${location}` },
+        { gMaps: 'Furniture Assembly', gBusiness: 'Furniture Assembly', faceBook: 'Furniture Assembly', fileName: `Furniture Assembly in ${location}` },
+        { gMaps: 'Paving', gBusiness: 'Paving', faceBook: 'Paving', fileName: `Paving in ${location}` },
+        { gMaps: 'Locksmith', gBusiness: 'Locksmith', faceBook: 'Locksmith', fileName: `Locksmith in ${location}` },
+        { gMaps: 'Man with a Van', gBusiness: 'Man with a Van', faceBook: 'Man with a Van', fileName: `Man with a Van in ${location}` },
+        { gMaps: 'Pest Control', gBusiness: 'Pest Control', faceBook: 'Pest Control', fileName: `Pest Control in ${location}` },
+        { gMaps: 'House Movers', gBusiness: 'House Movers', faceBook: 'House Movers', fileName: `House Movers in ${location}` },
+        { gMaps: 'House Renovation', gBusiness: 'House Renovation', faceBook: 'House Renovation', fileName: `House Renovation in ${location}` },
+        { gMaps: 'Roof Repair', gBusiness: 'Roof Repair', faceBook: 'Roof Repair', fileName: `Roof Repair in ${location}` },
+        { gMaps: 'Construction Equipment Hire', gBusiness: 'Construction Equipment Hire', faceBook: 'Construction Equipment Hire', fileName: `Construction Equipment Hire in ${location}` },
+        { gMaps: 'Skip Hire', gBusiness: 'Skip Equipment Hire', faceBook: 'Skip Hire', fileName: `Skip Hire in ${location}` },
+        { gMaps: 'Scaffolding', gBusiness: 'Scaffolding', faceBook: 'Scaffolding', fileName: `Scaffolding in ${location}` },
+        { gMaps: 'Home Electrical Inspection', gBusiness: 'Home Electrical Inspection', faceBook: 'Home Electrical Inspection', fileName: `Home Electrical Inspection in ${location}` },
+        { gMaps: 'Groundwork Equipment Hire', gBusiness: 'Groundwork Equipment Hire', faceBook: 'Groundwork Equipment Hire', fileName: `Groundwork Equipment Hire in ${location}` },
+        { gMaps: 'Air Conditioner Repair', gBusiness: 'Air Conditioner Repair', faceBook: 'Air Conditioner Repair', fileName: `Air Conditioner Repair in ${location}` },
+        { gMaps: 'Solar System Installation', gBusiness: 'Solar System Installation', faceBook: 'Solar System Installation', fileName: `Solar System Installation in ${location}` },
+        { gMaps: 'Carpenter', gBusiness: 'Carpenter', faceBook: 'Carpenter', fileName: `Carpenter in ${location}` },
+        { gMaps: 'Gas Safety Certificate', gBusiness: 'Gas Safety Certificate', faceBook: 'Gas Safety Certificate', fileName: `Gas Safety Certificate in ${location}` }
+    ];
       for (const config of scraperConfigs) {
         await processScraperConfig(config, location);
       }
