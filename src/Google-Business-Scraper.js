@@ -44,7 +44,7 @@ async function gBusiness(service, location) {
     throw new Error("Search bar not found");
   }
   await new Promise((resolve) => setTimeout(resolve, 2000));
-  await page.reload();
+  await page.reload({ waitUntil: "networkidle2" });
   await new Promise((resolve) => setTimeout(resolve, 2000));
   
   let results = [];
