@@ -43,6 +43,8 @@ async function facebookScraper(query , cityName) {
   await new Promise((resolve) => setTimeout(resolve, 1000));
   await page.click('ul[role="listbox"] li:first-of-type');
 
+  const newCookies = await page.cookies();
+  await fs.writeFile("./cookies.json", JSON.stringify(newCookies, null, 2));
   await new Promise((resolve) => setTimeout(resolve, 3000));
 
   // Scroll dynamically to load all content
