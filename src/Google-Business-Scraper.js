@@ -11,7 +11,7 @@ puppeteerExtra.use(Stealth());
 
 async function gBusiness(service, location) {
   const query = `${service} in ${location}`;
-  const browser = await puppeteerExtra.launch({ headless: true});
+  const browser = await puppeteerExtra.launch({ headless: false});
   const page = await browser.newPage();
 
   await page.setViewport({
@@ -105,7 +105,7 @@ async function gBusiness(service, location) {
   };
 
   console.log(`unique links : ${uniqueLinks.length}`);
-  let data = [];
+  let dataArray = [];
 
   for (let link of uniqueLinks) {
     try {
@@ -120,40 +120,107 @@ async function gBusiness(service, location) {
       console.log(`Visiting: ${fullURL}`);
       await page.goto(fullURL, { waitUntil: "networkidle2" });
 
-      // data
-      const name = await page
-        .$eval("div.rgnuSb.tZPcob", (el) => el.textContent)
-        .catch(() => null);
-      const websiteLink = await page
-        .$eval("a.iPF7ob", (el) => el.getAttribute("href"))
-        .catch(() => null);
-      const phone = await page
-        .$eval("div.eigqqc", (el) => el.textContent)
-        .catch(() => null);
-      const address = await page
-        .$eval("div.fccl3c", (el) => el.textContent)
-        .catch(() => null);
-      const category = await page
-        .$eval("div.bg3Wkc", (el) => el.textContent)
-        .catch(() => null);
-      // Push data into the array
-      data.push({
-        name: name || null,
-        phone: phone || null,
-        email: null,
-        website: websiteLink || null,
-        address: address || null,
-        category : category || null
+      // // data
+      // const name = await page
+      //   .$eval("div.rgnuSb.tZPcob", (el) => el.textContent)
+      //   .catch(() => null);
+      // const websiteLink = await page
+      //   .$eval("a.iPF7ob", (el) => el.getAttribute("href"))
+      //   .catch(() => null);
+      // const phone = await page
+      //   .$eval("div.eigqqc", (el) => el.textContent)
+      //   .catch(() => null);
+      // const address = await page
+      //   .$eval("div.fccl3c", (el) => el.textContent)
+      //   .catch(() => null);
+      // const category = await page
+      //   .$eval("div.bg3Wkc", (el) => el.textContent)
+      //   .catch(() => null);
+      // // Push data into the array
+      // data.push({
+      //   name: name || null,
+      //   phone: phone || null,
+      //   email: null,
+      //   website: websiteLink || null,
+      //   address: address || null,
+      //   category : category || null
+      // });
+
+      // console.log({
+      //   name: name || null,
+      //   phone: phone || null,
+      //   email: null,
+      //   website: websiteLink || null,
+      //   address: address || null,
+      //   category : category || null
+      // });
+
+      const data = await page.evaluate(() => {
+        // Extract text by matching an SVG icon
+        const extractInfoBySvgPath = (svgPath , match = 1) => {
+          const svgElements = document.querySelectorAll("svg");
+          let matchCount = 0; // Counter to track matches
+      
+          for (const svg of svgElements) {
+            const pathElement = svg.querySelector("path");
+            if (pathElement && pathElement.getAttribute("d") === svgPath) {
+              matchCount++; // Increment match count
+      
+              if (matchCount === match) {
+                const parentDiv = svg.parentElement;
+                if (parentDiv && parentDiv.nextElementSibling) {
+                  return parentDiv.nextElementSibling.textContent.trim();
+                }
+              }
+            }
+          }
+          return null; // Return null if the second match isn't found
+        };
+      
+        // Extract href by matching an SVG icon
+        const extractLinkBySvgPath = (svgPath) => {
+          const svgElements = document.querySelectorAll("svg");
+        
+          for (const svg of svgElements) {
+            const pathElement = svg.querySelector("path");
+            if (pathElement && pathElement.getAttribute("d") === svgPath) {
+              // Locate the closest parent anchor tag
+              const anchorElement = svg.closest("a");
+              if (anchorElement && anchorElement.href) {
+                return anchorElement.href.trim();
+              }
+            }
+          }
+          return null; // Return null if no matching link is found
+        };
+        
+       // SVG paths
+       // const phoneSvgPath = `M16.02 14.46l-2.62 2.62a16.141 16.141 0 0 1-6.5-6.5l2.62-2.62a.98.98 0 0 0 .27-.9L9.15 3.8c-.1-.46-.51-.8-.98-.8H4.02c-.56 0-1.03.47-1 1.03a17.92 17.92 0 0 0 2.43 8.01 18.08 18.08 0 0 0 6.5 6.5 17.92 17.92 0 0 0 8.01 2.43c.56.03 1.03-.44 1.03-1v-4.15c0-.48-.34-.89-.8-.98l-3.26-.65c-.33-.07-.67.04-.91.27z`;
+        const websiteSvgPath = `M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z`;
+        const addressSvgPath = `M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z`
+
+        const address = extractInfoBySvgPath(addressSvgPath) ; //textcontent
+        const websiteLink = extractLinkBySvgPath(websiteSvgPath , 3); //href 
+
+        const phone = document.querySelector("div.eigqqc")?.textContent.trim() || null;
+        const name =
+          document.querySelector("div.rgnuSb.tZPcob")?.textContent.trim() || null;
+        const category =
+          document.querySelector("div.bg3Wkc")?.textContent.trim() || null;
+      
+        // Return collected data
+        return {
+          name: name || null,
+          phone: phone || null,
+          email: null,
+          website: websiteLink || null, 
+          address: address || null,
+          category: category || null,
+        };
       });
 
-      console.log({
-        name: name || null,
-        phone: phone || null,
-        email: null,
-        website: websiteLink || null,
-        address: address || null,
-        category : category || null
-      });
+      // Push data into the array
+      dataArray.push(data);
       await page.close();
     } catch (error) {
       console.error(`Error visiting ${link}: ${error.message}`);
@@ -169,7 +236,7 @@ async function gBusiness(service, location) {
   // console.log(`Data saved to ${query}.xlsx`);
 
   await browser.close();
-  return data;
+  return dataArray;
 }
 
 // gBusiness('electricians' , 'london')
