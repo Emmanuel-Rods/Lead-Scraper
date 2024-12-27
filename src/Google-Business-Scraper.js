@@ -45,6 +45,8 @@ async function gBusiness(service, location) {
   }
   await new Promise((resolve) => setTimeout(resolve, 2000));
   await page.reload();
+  await new Promise((resolve) => setTimeout(resolve, 2000));
+  
   let results = [];
 
   while (true) {
