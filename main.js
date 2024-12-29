@@ -130,7 +130,9 @@ async function processScraperConfig(config, location) {
 async function Main() {
   try {
     for (const location of locations) {
-      const [city , state ] = location.split(/\s+/)
+      const parts = location.split(/\s+/);
+      const state = parts.pop(); 
+      const city = parts.join(" ");
       
       const scraperConfigs = [
         {
