@@ -17,7 +17,7 @@ console.warn(`\n
 // console.log(emailCrawler) //  @ params  jsonarray , filename @returns excel file
 
 // Input configurations
-const locations = ["harlingen texas"];
+const locations = ["lubbock texas"];
 //Cleaning in harlingen texas
 
 // Function to merge and deduplicate results
@@ -60,10 +60,10 @@ async function processScraperConfig(config, location) {
     const scraperTypes = [
       { key: "faceBook", scraper: facebookScraper },
       { key: "faceBookAlt", scraper: facebookScraper },
-      { key: "gMaps", scraper: gMaps },
-      { key: "gMapsAlt", scraper: gMaps },
-      { key: "gBusiness", scraper: gBusiness },
-      { key: "gBusinessAlt", scraper: gBusiness },
+      // { key: "gMaps", scraper: gMaps },
+      // { key: "gMapsAlt", scraper: gMaps },
+      // { key: "gBusiness", scraper: gBusiness },
+      // { key: "gBusinessAlt", scraper: gBusiness },
     ];
 
     // Prepare scraper promises
@@ -130,168 +130,170 @@ async function processScraperConfig(config, location) {
 async function Main() {
   try {
     for (const location of locations) {
+      const [city , state ] = location.split(/\s+/)
+      
       const scraperConfigs = [
         {
           gBusiness: "Aluminium Joinery",
           gBusinessAlt: "PVC Joinery",
           faceBook: "Aluminium Joinery",
           faceBookAlt: "PVC Joinery",
-          fileName: `Aluminium and PVC Joinery in ${location}`,
+          fileName: `${state} Aluminium and PVC Joinery in ${city}`,
         },
         {
           gBusiness: "Carpet cleaning",
           gBusinessAlt: "Upholstery Cleaning",
           faceBook: "Carpet Cleaning",
           faceBookAlt: "Upholstery Cleaning",
-          fileName: `Carpet and Upholstery Cleaning in ${location}`,
+          fileName: `${state} Carpet and Upholstery Cleaning in ${city}`,
         },
         {
           gBusiness: "Cleaning",
           faceBook: "Cleaning",
-          fileName: `Cleaning in ${location}`,
+          fileName: `${state} Cleaning in ${city}`,
         },
         {
           gMaps: "Fencing",
           gMapsAlt: "Decking",
           faceBook: "Fencing",
           faceBookAlt: "Decking",
-          fileName: `Fencing and Decking in ${location}`,
+          fileName: `${state} Fencing and Decking in ${city}`,
         },
         {
           gBusiness: "Custom Blinds",
           gBusinessAlt: "Shutters",
           faceBook: "Custom Blinds",
           faceBookAlt: "Shutters",
-          fileName: `Custom Blinds and Shutters in ${location}`,
+          fileName: `${state} Custom Blinds and Shutters in ${city}`,
         },
         {
           gBusiness: "Gardening",
           gBusinessAlt: "Landscape Designers",
           faceBook: "Gardening",
           faceBookAlt: "Landscapers",
-          fileName: `Gardening and Landscape Designers in ${location}`,
+          fileName: `${state} Gardening and Landscape Designers in ${city}`,
         },
         {
           gBusiness: "Plastering",
           gBusinessAlt: "Rendering",
           faceBook: "Plastering",
           faceBookAlt: "Rendering",
-          fileName: `Plastering and Rendering in ${location}`,
+          fileName: `${state} Plastering and Rendering in ${city}`,
         },
         {
           gBusiness: "Gas Line Installation and Plumbing",
           faceBook: "Gas Line Installation",
           faceBookAlt: "Plumbing",
-          fileName: `Gas Line Installation and Plumbing in ${location}`,
+          fileName: `${state} Gas Line Installation and Plumbing in ${city}`,
         },
         {
           gBusiness: "Painting",
           gMaps: "Painting and Decoration",
           faceBook: "Painting",
           faceBookAlt: "Decoration",
-          fileName: `Painting and Decoration in ${location}`,
+          fileName: `${state} Painting and Decoration in ${city}`,
         },
         {
           gBusiness: "Interior Doors",
           faceBook: "Interior Doors",
-          fileName: `Interior Doors in ${location}`,
+          fileName: `${state} Interior Doors in ${city}`,
         },
         {
           gBusiness: "Door Repair",
           faceBook: "Door Repair",
-          fileName: `Door Repair in ${location}`,
+          fileName: `${state} Door Repair in ${city}`,
         },
         {
           gBusiness: "Electrical Services",
           faceBook: "Electrical Services",
-          fileName: `Electrical Services in ${location}`,
+          fileName: `${state} Electrical Services in ${city}`,
         },
         {
           gBusiness: "Pool Installation",
           gBusinessAlt: "Pool Repair",
           faceBook: "Pool Installation",
           faceBookAlt: "Pool Repair",
-          fileName: `Pool Installation and Repair in ${location}`,
+          fileName: `${state} Pool Installation and Repair in ${city}`,
         },
         {
           gMaps: "Floor Installation",
           faceBook: "Floor Installation",
-          fileName: `Floor Installation in ${location}`,
+          fileName: `${state} Floor Installation in ${city}`,
         },
         {
           gBusiness: "Furniture Assembly",
           faceBook: "Furniture Assembly",
-          fileName: `Furniture Assembly in ${location}`,
+          fileName: `${state} Furniture Assembly in ${city}`,
         },
         {
           gBusiness: "Paving",
           faceBook: "Paving",
-          fileName: `Paving in ${location}`,
+          fileName: `${state} Paving in ${city}`,
         },
         {
           gBusiness: "Locksmith",
           faceBook: "Locksmith",
-          fileName: `Locksmith in ${location}`,
+          fileName: `${state} Locksmith in ${city}`,
         },
         {
           gBusiness: "Man with a Van",
           faceBook: "Man with a Van",
-          fileName: `Man with a Van in ${location}`,
+          fileName: `${state} Man with a Van in ${city}`,
         },
         {
           gBusiness: "Pest Control",
           faceBook: "Pest Control",
-          fileName: `Pest Control in ${location}`,
+          fileName: `${state} Pest Control in ${city}`,
         },
         {
           gBusiness: "House Movers",
           faceBook: "House Movers",
-          fileName: `House Movers in ${location}`,
+          fileName: `${state} House Movers in ${city}`,
         },
         {
           gBusiness: "House Renovation Services",
           faceBook: "House Renovation",
-          fileName: `House Renovation in ${location}`,
+          fileName: `${state} House Renovation in ${city}`,
         },
         {
           gBusiness: "Roof Repair",
           faceBook: "Roof Repair",
-          fileName: `Roof Repair in ${location}`,
+          fileName: `${state} Roof Repair in ${city}`,
         },
         {
           gBusiness: "Construction Equipment Hire",
           faceBook: "Construction Equipment Hire",
-          fileName: `Construction Equipment Hire in ${location}`,
+          fileName: `${state} Construction Equipment Hire in ${city}`,
         },
         {
           gBusiness: "Skip Hire",
           faceBook: "Skip Hire",
-          fileName: `Skip Hire in ${location}`,
+          fileName: `${state} Skip Hire in ${city}`,
         },
         {
           gBusiness: "Scaffolding",
           faceBook: "Scaffolding",
-          fileName: `Scaffolding in ${location}`,
+          fileName: `${state} Scaffolding in ${city}`,
         },
         {
           gBusiness: "Groundwork Equipment Hire",
           faceBook: "Groundwork Equipment Hire",
-          fileName: `Groundwork Equipment Hire in ${location}`,
+          fileName: `${state} Groundwork Equipment Hire in ${city}`,
         },
         {
           gBusiness: "Air Conditioner Repair",
           faceBook: "Air Conditioner Repair",
-          fileName: `Air Conditioner Repair in ${location}`,
+          fileName: `${state} Air Conditioner Repair in ${city}`,
         },
         {
           gBusiness: "Solar System Installation",
           faceBook: "Solar System Installation",
-          fileName: `Solar System Installation in ${location}`,
+          fileName: `${state} Solar System Installation in ${city}`,
         },
         {
           gBusiness: "Carpenter",
           faceBook: "Carpenter",
-          fileName: `Carpenter in ${location}`,
+          fileName: `${state} Carpenter in ${city}`,
         },
       ];
       for (const config of scraperConfigs) {
