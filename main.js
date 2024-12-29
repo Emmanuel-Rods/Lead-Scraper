@@ -60,10 +60,10 @@ async function processScraperConfig(config, location) {
     const scraperTypes = [
       { key: "faceBook", scraper: facebookScraper },
       { key: "faceBookAlt", scraper: facebookScraper },
-      // { key: "gMaps", scraper: gMaps },
-      // { key: "gMapsAlt", scraper: gMaps },
-      // { key: "gBusiness", scraper: gBusiness },
-      // { key: "gBusinessAlt", scraper: gBusiness },
+      { key: "gMaps", scraper: gMaps },
+      { key: "gMapsAlt", scraper: gMaps },
+      { key: "gBusiness", scraper: gBusiness },
+      { key: "gBusinessAlt", scraper: gBusiness },
     ];
 
     // Prepare scraper promises
