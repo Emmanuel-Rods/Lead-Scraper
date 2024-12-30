@@ -112,7 +112,7 @@ async function processScraperConfig(config, location) {
 
     // Save results to an Excel file
     const filename = `${config.fileName}.xlsx`;
-    await emailCrawler(deduplicatedData, filename);
+    await emailCrawler(deduplicatedData, filename , location);
     console.log(`Excel file saved as: ${filename}`);
   } catch (error) {
     console.error(
