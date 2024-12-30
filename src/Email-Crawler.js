@@ -43,10 +43,16 @@ const extractEmails = (html) => {
     "fakemail.org",
     "testing.com",
     "nowhere.com",
+    "mysite.com",
+    ".example.com",
+    "youraddress.com",
+    "ebytes.com",
+    "sentry-next.wixpress.com" ,
+    "address.com"
   ];
 
   // List of specific fake emails to exclude
-  const fakeEmails = ["0@gmail.com", "info@mysite.com" , 'john@doe.com' , 'john@smith.com'];
+  const fakeEmails = ["0@gmail.com", "info@mysite.com" , 'john@doe.com' , 'john@smith.com' , 'impallari@gmail.com' , 'filler@godaddy.com' , 'contact@sansoxygen.com' ,  "micah@michahrich.com"];
 
   // List of excluded extensions (e.g., image files)
   const excludedExtensions = [
@@ -221,7 +227,7 @@ const getHomePage = (url) => {
   }
 };
 
-async function emailCrawler(jsonArray, fileName) {
+async function emailCrawler(jsonArray, fileName , location) {
   if (jsonArray.length == 0) {
     console.warn(`Json Array has no data for ${fileName}`)
     return []
@@ -240,7 +246,7 @@ async function emailCrawler(jsonArray, fileName) {
         rows.push(data); //modified data
         console.log(data);
       } else {
-        rows.push(data); // just to compare , remove if neccessary
+        rows.push(data); 
       }
     }
     catch(e){
@@ -251,10 +257,47 @@ async function emailCrawler(jsonArray, fileName) {
     return rows.filter(row => row[Object.keys(row)[2]]); // Checks if the third property (email) exists
   }
 
-  Filteredrows = filterRowsWithEmail(rows)
+  filteredRows = filterRowsWithEmail(rows)
+
+  if(filteredRows.length == 0){
+    console.warn(`No Data Saved for : ${fileName} but file will be Created , Either there were No Emails OR Internet Connectivity Was Lost During Email Crawling`)
+  }
+  
+  //extract categories function 
+  function extractCategory(filename, city, state) {
+    const normalizedFilename = filename.toLowerCase();
+    const normalizedCity = city.toLowerCase();
+    const normalizedState = state.toLowerCase();
+  
+    let modifiedFilename = normalizedFilename
+      .replace(normalizedCity, "") // Remove city
+      .replace(normalizedState, ""); // Remove state
+
+    modifiedFilename = modifiedFilename.replace(/\bin\b/, ""); // Remove "in"
+  
+
+    modifiedFilename = modifiedFilename.trim();
+    const words = modifiedFilename.split(/\s+/); 
+  
+    return words.join(" ") || null; 
+  }
+
+  const parts = location.split(/\s+/);
+  const state = parts.pop(); 
+  const city = parts.join(" ");
+  const extractedcategory = extractCategory(fileName, city, state);
+
+  //standerizing the excel rows 
+  const standardizedArray = filteredRows.map(item => ({
+    [extractedcategory]: item.name || null,
+    [city]: item.email ,
+    [state]: item.phone || null,
+    category: item.category || null,
+    address: item.address || null,
+  }));
 
   //save data to excel
-  const worksheet = xlsx.utils.json_to_sheet(Filteredrows);
+  const worksheet = xlsx.utils.json_to_sheet(standardizedArray);
   const workbook = xlsx.utils.book_new();
   xlsx.utils.book_append_sheet(workbook, worksheet, "Updated Data");
   xlsx.writeFile(workbook, fileName);
