@@ -47,8 +47,10 @@ const extractEmails = (html) => {
     ".example.com",
     "youraddress.com",
     "ebytes.com",
-    "sentry-next.wixpress.com" ,
-    "address.com"
+    "address.com",
+    "sentry.io",
+    "sentry.wixpress.com",
+    'sentry-next.wixpress.com'
   ];
 
   // List of specific fake emails to exclude
