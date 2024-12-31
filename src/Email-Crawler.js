@@ -369,6 +369,10 @@ async function jsRender(url) {
       const pageWithCookies = await browser.newPage();
 
       for (const link of links) {
+        if (!link.startsWith("http")) {
+          console.warn(`Skipping invalid link: ${link}`);
+          continue;
+        }
         try {
           await pageWithCookies.goto(link, { timeout: 30000, waitUntil: "domcontentloaded" });
           await pageWithCookies.waitForSelector("body", { timeout: 10000 });
