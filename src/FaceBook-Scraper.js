@@ -116,7 +116,7 @@ async function facebookScraper(query , cityName) {
         };
         
         const allH1s = [...document.querySelectorAll("h1:not(.html-div h1)")];
-        const nameElement = allH1s.length ? allH1s[allH1s.length - 1] : null; // Get the last h1
+        const nameElement = allH1s.length ? allH1s[0] : null; // Get the last h1
         const name = nameElement ? nameElement.textContent.trim() : null;
 
         // Extract phone number, email, and website using their unique file names
