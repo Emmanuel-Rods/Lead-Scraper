@@ -143,7 +143,9 @@ const findEmails = async (url, depth = 0, visited = new Set()) => {
 
   try {
     console.log(`Scraping: ${url}`);
-    const response = await axios.get(url);
+    const response = await axios.get(url,{
+      timeout: 10000 
+  });
     const html = response.data;
 
     const emails = extractEmails(html);
@@ -276,7 +278,7 @@ async function emailCrawler(jsonArray, fileName , location) {
       .replace(normalizedState, ""); // Remove state
 
     modifiedFilename = modifiedFilename.replace(/\bin\b/, ""); // Remove "in"
-  
+    modifiedFilename = modifiedFilename.replace(/\.[^/.]+$/, ""); // Remove file extension
 
     modifiedFilename = modifiedFilename.trim();
     const words = modifiedFilename.split(/\s+/); 
