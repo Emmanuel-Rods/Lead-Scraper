@@ -115,10 +115,9 @@ async function facebookScraper(query , cityName) {
           return null;
         };
         
-        const allH1s = [...document.querySelectorAll("h1:not(.html-div h1)")];
-        const nameElement = allH1s.length ? allH1s[0] : null; // Get the last h1
+        const allH1s = [...document.querySelectorAll('div[role="main"] h1')]; //only selects from the main div
+        const nameElement = allH1s.length ? allH1s[0] : null; 
         const name = nameElement ? nameElement.textContent.trim() : null;
-
         // Extract phone number, email, and website using their unique file names
         const phone = extractInfoByIcon("Dc7-7AgwkwS.png");
         const email = extractInfoByIcon("2PIcyqpptfD.png");
