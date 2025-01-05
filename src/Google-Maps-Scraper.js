@@ -3,6 +3,7 @@ const Stealth = require("puppeteer-extra-plugin-stealth");
 const fs = require("fs");
 const xlsx = require("xlsx");
 const path = require("path");
+const logError = require("./logger.js");
 
 puppeteerExtra.use(Stealth());
 
@@ -120,6 +121,7 @@ async function gMaps(service, location) {
         }
       }
     } catch (error) {
+      logError(error, 'Google-Maps-Scraper'); 
       console.error(`Error processing link ${href}:`, error);
     }
   }

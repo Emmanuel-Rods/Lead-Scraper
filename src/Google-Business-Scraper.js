@@ -3,6 +3,7 @@ const puppeteerExtra = require("puppeteer-extra");
 const Stealth = require("puppeteer-extra-plugin-stealth");
 const fs = require("fs");
 const xlsx = require("xlsx");
+const logError = require("./logger.js");
 
 puppeteerExtra.use(Stealth());
 
@@ -247,6 +248,7 @@ async function gBusiness(service, location) {
       dataArray.push(data);
       await page.close();
     } catch (error) {
+      logError(error, 'Google-Business-Scraper');
       console.error(`Error visiting ${link}: ${error.message}`);
     }
   }

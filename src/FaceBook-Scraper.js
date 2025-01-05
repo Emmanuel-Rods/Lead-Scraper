@@ -3,6 +3,7 @@ const Stealth = require("puppeteer-extra-plugin-stealth");
 puppeteerExtra.use(Stealth());
 const fs = require("fs").promises;
 const XLSX = require("xlsx");
+const logError = require("./logger.js");
 
 const scrollDelay = 1500 //in milliseconds
 const pageLoadDelay = 8000 // in miliseconds
@@ -162,6 +163,7 @@ async function facebookScraper(query , cityName) {
       // Close the new page after extracting data
       await newPage.close();
     } catch (error) {
+      logError(error, 'FaceBook-Scraper');
       console.error(`Error extracting data from ${link}:`, error);
     }
   }

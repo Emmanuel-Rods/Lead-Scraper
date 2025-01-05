@@ -2,6 +2,7 @@ const cheerio = require("cheerio");
 const xlsx = require("xlsx");
 const fs = require("fs").promises;
 const axios = require("axios");
+const logError = require("./logger.js");
 
 const MAX_DEPTH = 2;
 const CONCURRENT_LIMIT = 5;
@@ -253,8 +254,9 @@ async function emailCrawler(jsonArray, fileName , location) {
         rows.push(data); 
       }
     }
-    catch(e){
-      console.error(`error occured while processing ${data} , ${e}`)
+    catch(error){
+      logError(error, 'FacebookScraper');
+      console.error(`error occured while processing ${data} , ${error}`)
    }
   }
   function filterRowsWithEmail(rows) {
@@ -384,6 +386,7 @@ async function jsRender(url) {
             emails.push(...subPageEmails);
           }
         } catch (subPageError) {
+          logError(subPageError, 'Email Crawler');
           console.error(`Failed to process ${link}:`, subPageError.message);
         }
       }
@@ -392,6 +395,7 @@ async function jsRender(url) {
     console.log("Collected Emails:", emails);
     return Array.from(new Set(emails));
   } catch (err) {
+    logError(err, 'Email Crawler');
     console.error(`Error in jsRender: ${err.message}`);
     return [];
   } finally {
