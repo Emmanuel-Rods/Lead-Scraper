@@ -59,12 +59,12 @@ async function processScraperConfig(config, location) {
   try {
     // Define scraper configurations
     const scraperTypes = [
-      // { key: "faceBook", scraper: facebookScraper },
-      // { key: "faceBookAlt", scraper: facebookScraper },
-      // { key: "gMaps", scraper: gMaps },
-      // { key: "gMapsAlt", scraper: gMaps },
+      { key: "faceBook", scraper: facebookScraper },
+      { key: "faceBookAlt", scraper: facebookScraper },
+      { key: "gMaps", scraper: gMaps },
+      { key: "gMapsAlt", scraper: gMaps },
       { key: "gBusiness", scraper: gBusiness },
-      // { key: "gBusinessAlt", scraper: gBusiness },
+      { key: "gBusinessAlt", scraper: gBusiness },
     ];
 
     // Prepare scraper promises
@@ -137,25 +137,25 @@ async function Main() {
       const city = parts.join(" ");
       
       const scraperConfigs = [
-        // {
-        //   gBusiness: "Aluminium Joinery",
-        //   gBusinessAlt: "PVC Joinery",
-        //   faceBook: "Aluminium Joinery",
-        //   faceBookAlt: "PVC Joinery",
-        //   fileName: `${state} Aluminium and PVC Joinery in ${city}`,
-        // },
-        // {
-        //   gBusiness: "Carpet cleaning",
-        //   gBusinessAlt: "Upholstery Cleaning",
-        //   faceBook: "Carpet Cleaning",
-        //   faceBookAlt: "Upholstery Cleaning",
-        //   fileName: `${state} Carpet and Upholstery Cleaning in ${city}`,
-        // },
-        // {
-        //   gBusiness: "Cleaning",
-        //   faceBook: "Cleaning",
-        //   fileName: `${state} Cleaning in ${city}`,
-        // },
+        {
+          gBusiness: "Aluminium Joinery",
+          gBusinessAlt: "PVC Joinery",
+          faceBook: "Aluminium Joinery",
+          faceBookAlt: "PVC Joinery",
+          fileName: `${state} Aluminium and PVC Joinery in ${city}`,
+        },
+        {
+          gBusiness: "Carpet cleaning",
+          gBusinessAlt: "Upholstery Cleaning",
+          faceBook: "Carpet Cleaning",
+          faceBookAlt: "Upholstery Cleaning",
+          fileName: `${state} Carpet and Upholstery Cleaning in ${city}`,
+        },
+        {
+          gBusiness: "Cleaning",
+          faceBook: "Cleaning",
+          fileName: `${state} Cleaning in ${city}`,
+        },
         {
           gMaps: "Fencing",
           gMapsAlt: "Decking",
