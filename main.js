@@ -3,6 +3,7 @@ const facebookScraper = require("./src/FaceBook-Scraper.js");
 const gBusiness = require("./src/Google-Business-Scraper.js");
 const gMaps = require("./src/Google-Maps-Scraper.js");
 const emailCrawler = require("./src/Email-Crawler.js");
+const logError = require("./src/logger.js");
 
 console.warn(`\n
   *** Disclaimer ***\n
@@ -17,7 +18,7 @@ console.warn(`\n
 // console.log(emailCrawler) //  @ params  jsonarray , filename @returns excel file
 
 // Input configurations
-const locations = ["lubbock texas"];
+const locations = ["Land O' Lakes Florida"];
 //Cleaning in harlingen texas
 
 // Function to merge and deduplicate results
@@ -58,12 +59,12 @@ async function processScraperConfig(config, location) {
   try {
     // Define scraper configurations
     const scraperTypes = [
-      { key: "faceBook", scraper: facebookScraper },
-      { key: "faceBookAlt", scraper: facebookScraper },
-      { key: "gMaps", scraper: gMaps },
-      { key: "gMapsAlt", scraper: gMaps },
+      // { key: "faceBook", scraper: facebookScraper },
+      // { key: "faceBookAlt", scraper: facebookScraper },
+      // { key: "gMaps", scraper: gMaps },
+      // { key: "gMapsAlt", scraper: gMaps },
       { key: "gBusiness", scraper: gBusiness },
-      { key: "gBusinessAlt", scraper: gBusiness },
+      // { key: "gBusinessAlt", scraper: gBusiness },
     ];
 
     // Prepare scraper promises
@@ -115,6 +116,7 @@ async function processScraperConfig(config, location) {
     await emailCrawler(deduplicatedData, filename , location);
     console.log(`Excel file saved as: ${filename}`);
   } catch (error) {
+    logError(error, 'Main');
     console.error(
       `Error processing config: ${JSON.stringify(
         config
@@ -135,25 +137,25 @@ async function Main() {
       const city = parts.join(" ");
       
       const scraperConfigs = [
-        {
-          gBusiness: "Aluminium Joinery",
-          gBusinessAlt: "PVC Joinery",
-          faceBook: "Aluminium Joinery",
-          faceBookAlt: "PVC Joinery",
-          fileName: `${state} Aluminium and PVC Joinery in ${city}`,
-        },
-        {
-          gBusiness: "Carpet cleaning",
-          gBusinessAlt: "Upholstery Cleaning",
-          faceBook: "Carpet Cleaning",
-          faceBookAlt: "Upholstery Cleaning",
-          fileName: `${state} Carpet and Upholstery Cleaning in ${city}`,
-        },
-        {
-          gBusiness: "Cleaning",
-          faceBook: "Cleaning",
-          fileName: `${state} Cleaning in ${city}`,
-        },
+        // {
+        //   gBusiness: "Aluminium Joinery",
+        //   gBusinessAlt: "PVC Joinery",
+        //   faceBook: "Aluminium Joinery",
+        //   faceBookAlt: "PVC Joinery",
+        //   fileName: `${state} Aluminium and PVC Joinery in ${city}`,
+        // },
+        // {
+        //   gBusiness: "Carpet cleaning",
+        //   gBusinessAlt: "Upholstery Cleaning",
+        //   faceBook: "Carpet Cleaning",
+        //   faceBookAlt: "Upholstery Cleaning",
+        //   fileName: `${state} Carpet and Upholstery Cleaning in ${city}`,
+        // },
+        // {
+        //   gBusiness: "Cleaning",
+        //   faceBook: "Cleaning",
+        //   fileName: `${state} Cleaning in ${city}`,
+        // },
         {
           gMaps: "Fencing",
           gMapsAlt: "Decking",
@@ -304,6 +306,7 @@ async function Main() {
     }
     console.log("All scrapers executed successfully.");
   } catch (error) {
+    logError(error, 'Main');
     console.error("Error in main execution:", error);
   }
 }
