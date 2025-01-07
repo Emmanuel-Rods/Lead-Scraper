@@ -50,6 +50,88 @@ function mergeResults(facebookData = [], gMapsData = [], gBusinessData = []) {
 
 //claude
 // Main scraper configuration processor
+// async function processScraperConfig(config, location) {
+//   console.time(config.fileName);
+//   console.log(
+//     `Processing config: ${JSON.stringify(config)}, location: ${location}`
+//   );
+
+//   try {
+//     // Define scraper configurations
+//     const scraperTypes = [
+//       { key: "faceBook", scraper: facebookScraper },
+//       { key: "faceBookAlt", scraper: facebookScraper },
+//       { key: "gMaps", scraper: gMaps },
+//       { key: "gMapsAlt", scraper: gMaps },
+//       { key: "gBusiness", scraper: gBusiness },
+//       { key: "gBusinessAlt", scraper: gBusiness },
+//     ];
+
+//     // Prepare scraper promises
+//     const scraperPromises = scraperTypes
+//       .filter((type) => config[type.key])
+//       .map((type) => ({
+//         key: type.key,
+//         promise: type.scraper(config[type.key], location),
+//       }));
+
+//     // Run scrapers concurrently
+//     const results = await Promise.allSettled(
+//       scraperPromises.map((scraper) => scraper.promise)
+//     );
+
+//     // Process and organize results
+//     const scraperResults = {};
+//     scraperPromises.forEach((scraper, index) => {
+//       const result = results[index];
+//       scraperResults[scraper.key] =
+//         result.status === "fulfilled" ? result.value : [];
+//     });
+
+//     // Combine data from different sources
+//     const facebookData = [
+//       ...(scraperResults.faceBook || []),
+//       ...(scraperResults.faceBookAlt || []),
+//     ];
+//     const gMapsData = [
+//       ...(scraperResults.gMaps || []),
+//       ...(scraperResults.gMapsAlt || []),
+//     ];
+//     const gBusinessData = [
+//       ...(scraperResults.gBusiness || []),
+//       ...(scraperResults.gBusinessAlt || []),
+//     ];
+
+//     // Merge and deduplicate data
+//     const deduplicatedData = mergeResults(
+//       facebookData,
+//       gMapsData,
+//       gBusinessData
+//     );
+
+//     console.log("Deduplicated data:", deduplicatedData);
+
+//     // Save results to an Excel file
+//     const filename = `${config.fileName}.xlsx`;
+//     await emailCrawler(deduplicatedData, filename , location);
+//     console.log(`Excel file saved as: ${filename}`);
+//   } catch (error) {
+//     logError(error, 'Main');
+//     console.error(
+//       `Error processing config: ${JSON.stringify(
+//         config
+//       )}, location: ${location}`,
+//       error
+//     );
+//   } finally {
+//     console.timeEnd(config.fileName);
+//   }
+// }
+
+// Utility function to create a delay
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+// Main scraper configuration processor
 async function processScraperConfig(config, location) {
   console.time(config.fileName);
   console.log(
@@ -67,25 +149,33 @@ async function processScraperConfig(config, location) {
       { key: "gBusinessAlt", scraper: gBusiness },
     ];
 
-    // Prepare scraper promises
-    const scraperPromises = scraperTypes
-      .filter((type) => config[type.key])
-      .map((type) => ({
-        key: type.key,
-        promise: type.scraper(config[type.key], location),
-      }));
+    // Filter active scrapers
+    const activeScrapers = scraperTypes.filter((type) => config[type.key]);
 
-    // Run scrapers concurrently
-    const results = await Promise.allSettled(
-      scraperPromises.map((scraper) => scraper.promise)
-    );
+    // Create an array of promises that will start at staggered intervals
+    const staggeredPromises = activeScrapers.map((scraper, index) => {
+      return (async () => {
+        // Wait for the staggered start time
+        await delay(index * 15000); 
+        
+        console.log(`Starting ${scraper.key} scraper...`);
+        try {
+          const result = await scraper.scraper(config[scraper.key], location);
+          return { status: "fulfilled", value: result, key: scraper.key };
+        } catch (error) {
+          console.error(`Error in ${scraper.key} scraper:`, error);
+          return { status: "rejected", value: [], key: scraper.key };
+        }
+      })();
+    });
+
+    // Wait for all scrapers to complete
+    const results = await Promise.all(staggeredPromises);
 
     // Process and organize results
     const scraperResults = {};
-    scraperPromises.forEach((scraper, index) => {
-      const result = results[index];
-      scraperResults[scraper.key] =
-        result.status === "fulfilled" ? result.value : [];
+    results.forEach((result) => {
+      scraperResults[result.key] = result.status === "fulfilled" ? result.value : [];
     });
 
     // Combine data from different sources
@@ -113,10 +203,9 @@ async function processScraperConfig(config, location) {
 
     // Save results to an Excel file
     const filename = `${config.fileName}.xlsx`;
-    await emailCrawler(deduplicatedData, filename , location);
+    await emailCrawler(deduplicatedData, filename, location);
     console.log(`Excel file saved as: ${filename}`);
   } catch (error) {
-    logError(error, 'Main');
     console.error(
       `Error processing config: ${JSON.stringify(
         config
