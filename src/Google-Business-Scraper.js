@@ -12,7 +12,7 @@ puppeteerExtra.use(Stealth());
 
 async function gBusiness(service, location) {
   const query = `${service} in ${location}`;
-  const browser = await puppeteerExtra.launch({ headless: true });
+  const browser = await puppeteerExtra.launch({ headless: false });
   const page = await browser.newPage();
 
   await page.setViewport({
@@ -65,6 +65,30 @@ async function gBusiness(service, location) {
     await page.reload();
     console.info(`Map reloaded`)
   }
+
+  async function mapReloader(page, attempts = 10) {
+    for (let retries = 0; retries < attempts; retries++) {
+      try {
+        const mapLoaded = await isMapLoaded(page);
+  
+        if (mapLoaded) {
+          console.info(`Map loaded successfully.`);
+          return;
+        }
+  
+        console.info(`Map not loaded. Attempt ${retries + 1}/${attempts}. Reloading...`);
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        await page.reload();
+      } catch (error) {
+        console.error(`Error during map reloading: ${error.message}`);
+        return; // Or decide how to handle errors (e.g., retry or stop).
+      }
+    }
+  
+    console.warn(`Map failed to load after ${attempts} attempts.`);
+  }
+  
+  await mapReloader()
 
   let results = [];
 
