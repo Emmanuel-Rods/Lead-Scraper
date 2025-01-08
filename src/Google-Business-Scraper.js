@@ -88,7 +88,7 @@ async function gBusiness(service, location) {
     console.warn(`Map failed to load after ${attempts} attempts.`);
   }
   
-  await mapReloader()
+  await mapReloader(page)
 
   let results = [];
 
