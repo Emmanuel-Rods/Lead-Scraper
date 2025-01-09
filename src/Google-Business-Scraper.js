@@ -12,7 +12,7 @@ puppeteerExtra.use(Stealth());
 
 async function gBusiness(service, location) {
   const query = `${service} in ${location}`;
-  const browser = await puppeteerExtra.launch({ headless: false });
+  const browser = await puppeteerExtra.launch({ headless: true});
   const page = await browser.newPage();
 
   await page.setViewport({
@@ -113,6 +113,9 @@ async function gBusiness(service, location) {
     });
 
     results.push(...newResults);
+    if(results.length > 500){
+      break; // quick fix 
+    }
 
     const clicked = await page.evaluate(() => {
       const nextButtons = Array.from(
