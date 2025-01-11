@@ -4,6 +4,8 @@ const Stealth = require("puppeteer-extra-plugin-stealth");
 const fs = require("fs");
 const xlsx = require("xlsx");
 const logError = require("./logger.js");
+const path = require('path');
+
 
 puppeteerExtra.use(Stealth());
 
@@ -48,7 +50,24 @@ async function gBusiness(service, location) {
 
   await page.reload({ waitUntil: "networkidle2" });
 
+   const randomMouseMovement = async (page, duration = 5000) => {
+    const { width, height } = await page.viewport(); 
+    const endTime = Date.now() + duration;
+
+    while (Date.now() < endTime) {
+        const x = Math.floor(Math.random() * width); 
+        const y = Math.floor(Math.random() * height); 
+
+        await page.mouse.move(x, y, { steps: Math.floor(Math.random() * 10) + 1 }); // Move to random coordinates
+        await new Promise((r) => setTimeout(r, Math.random() * 300)); // Random pause between movements
+    }
+};
+
+// Perform random mouse movements for 5 seconds
+await randomMouseMovement(page, 2000);
+
   const isMapLoaded = async (page) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000)); //extra
     const isLoaded = await page.evaluate(() => {
       const mapElement = document.querySelector('div.yXg2De[jsname="haAclf"]');
       return mapElement && window.getComputedStyle(mapElement).opacity === '1';
@@ -77,15 +96,21 @@ async function gBusiness(service, location) {
         }
   
         console.info(`Map not loaded. Attempt ${retries + 1}/${attempts}. Reloading...`);
-        await new Promise(resolve => setTimeout(resolve, 3000));
+
+        await new Promise(resolve => setTimeout(resolve, 4000));
         await page.reload();
+        if(attempts == 10){
+          logMapsError('Error during Map reloading', `${service} in ${location}`)
+          break;
+        }
       } catch (error) {
         console.error(`Error during map reloading: ${error.message}`);
-        return; // Or decide how to handle errors (e.g., retry or stop).
+        logMapsError('Error during Map reloading', `${service} in ${location}` , error )
+        return; 
       }
     }
   
-    console.warn(`Map failed to load after ${attempts} attempts.`);
+    console.warn(`Map failed to load after ${retries} attempts.`);
   }
   
   await mapReloader(page)
@@ -93,6 +118,7 @@ async function gBusiness(service, location) {
   let results = [];
 
   while (true) {
+    await mapReloader(page) //check if the page is fully loaded
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const newResults = await page.evaluate(() => {
@@ -169,41 +195,6 @@ async function gBusiness(service, location) {
 
       console.log(`Visiting: ${fullURL}`);
       await page.goto(fullURL, { waitUntil: "networkidle2" });
-
-      // // data
-      // const name = await page
-      //   .$eval("div.rgnuSb.tZPcob", (el) => el.textContent)
-      //   .catch(() => null);
-      // const websiteLink = await page
-      //   .$eval("a.iPF7ob", (el) => el.getAttribute("href"))
-      //   .catch(() => null);
-      // const phone = await page
-      //   .$eval("div.eigqqc", (el) => el.textContent)
-      //   .catch(() => null);
-      // const address = await page
-      //   .$eval("div.fccl3c", (el) => el.textContent)
-      //   .catch(() => null);
-      // const category = await page
-      //   .$eval("div.bg3Wkc", (el) => el.textContent)
-      //   .catch(() => null);
-      // // Push data into the array
-      // data.push({
-      //   name: name || null,
-      //   phone: phone || null,
-      //   email: null,
-      //   website: websiteLink || null,
-      //   address: address || null,
-      //   category : category || null
-      // });
-
-      // console.log({
-      //   name: name || null,
-      //   phone: phone || null,
-      //   email: null,
-      //   website: websiteLink || null,
-      //   address: address || null,
-      //   category : category || null
-      // });
 
       const data = await page.evaluate(() => {
         // Extract text by matching an SVG icon
@@ -294,3 +285,35 @@ async function gBusiness(service, location) {
 
 // gBusiness('electricians' , 'london')
 module.exports = gBusiness;
+
+//map error logger
+function logMapsError(info , category , error  ) {
+  const logsDir = path.join(__dirname, '../logs'); 
+  const logFile = path.join(logsDir, 'reloading-log.json'); 
+
+  if (!fs.existsSync(logsDir)) {
+    fs.mkdirSync(logsDir, { recursive: true });
+  }
+
+
+  const errorLog = {
+    timestamp: new Date().toISOString(),
+    category: category,
+    message: error?.message || null  ,
+    info: info ,
+    stack: error?.stack || null,
+  };
+
+  try {
+    let logs = [];
+    if (fs.existsSync(logFile)) {
+      const existingLogs = fs.readFileSync(logFile, 'utf8');
+      logs = JSON.parse(existingLogs); 
+    }
+    logs.push(errorLog); 
+    fs.writeFileSync(logFile, JSON.stringify(logs, null, 2)); 
+    console.log('Error logged successfully.');
+  } catch (fileError) {
+    console.error('Failed to log error:', fileError.message);
+  }
+}
