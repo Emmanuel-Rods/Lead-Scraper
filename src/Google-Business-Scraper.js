@@ -110,7 +110,6 @@ await randomMouseMovement(page, 2000);
       }
     }
   
-    console.warn(`Map failed to load after ${retries} attempts.`);
   }
   
   await mapReloader(page)
