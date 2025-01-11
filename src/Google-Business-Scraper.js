@@ -101,7 +101,7 @@ await randomMouseMovement(page, 2000);
         await page.reload();
         if(attempts == 10){
           logMapsError('Error during Map reloading', `${service} in ${location}`)
-          break;
+         return 
         }
       } catch (error) {
         console.error(`Error during map reloading: ${error.message}`);
