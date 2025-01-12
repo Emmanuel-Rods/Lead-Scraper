@@ -400,7 +400,11 @@ async function jsRender(url) {
     return [];
   } finally {
     if (browser) {
-      await browser.close();
+      try {
+        await browser.close();
+      } catch (error) {
+        console.log(`error while closing the browser ${error}`)
+      }
     }
   }
 }
