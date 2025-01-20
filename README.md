@@ -1,7 +1,7 @@
 ##### fork of super scraper
 # installation
 ```bash
-git clone https://github.com/Emmanuel-Rods/Super-Scraper
+git clone https://github.com/Emmanuel-Rods/Lead-Scraper
 cd Super-Scraper
 cp .env.example .env
 npm install
