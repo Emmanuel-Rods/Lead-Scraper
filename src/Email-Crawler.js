@@ -260,7 +260,7 @@ async function emailCrawler(jsonArray, fileName , location) {
    }
   }
   function filterRowsWithEmail(rows) {
-    return rows.filter(row => row[Object.keys(row)[2]]); // Checks if the third property (email) exists
+    return rows.filter(row => row[Object.keys(row)[2]] || row[Object.keys(row)[1]]); // Checks if the third property (email) exists or phone 
   }
 
   filteredRows = filterRowsWithEmail(rows)
