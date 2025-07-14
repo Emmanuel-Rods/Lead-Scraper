@@ -299,6 +299,7 @@ async function emailCrawler(jsonArray, fileName , location) {
     [city]: item.email ,
     [state]: item.phone || null,
     category: item.category || null,
+    website : item.website || null ,
     address: item.address || null,
   }));
 
