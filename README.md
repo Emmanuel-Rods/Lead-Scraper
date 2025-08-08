@@ -2,7 +2,7 @@
 # installation
 ```bash
 git clone https://github.com/Emmanuel-Rods/Lead-Scraper
-cd Super-Scraper
+cd Lead-Scraper
 cp .env.example .env
 npm install
 ```
